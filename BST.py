@@ -1,3 +1,4 @@
+from math import trunc
 from Node import Node
 
 
@@ -5,28 +6,29 @@ class BST:
     def __init__(self, root=None):
         self.root = root
 
-    def add(self,node):
+    def add(self,value):
         if not self.root:
-            self.root = node
-            return
+            self.root = Node(value)
+            return self
         runner = self.root
         while True:
-            if node.value > runner.value:
+            if value > runner.value:
                 if not runner.right:
-                    runner.right=node
-                    return
+                    runner.right=Node(value)
+                    return self
                 runner=runner.right
             else:
                 if not runner.left:
-                    runner.left = node
-                    return
+                    runner.left = Node(value)
+                    return self
                 runner=runner.left
+        
 
     def contains(self,value):
-        if self.is_empty():
-            return False
         runner = self.root
-        while runner.value != value:
+        while runner:
+            if value == runner.value:
+                return True
             if runner.value < value:
                 if runner.right:
                     runner=runner.right
@@ -37,7 +39,7 @@ class BST:
                     runner=runner.left
                 else:
                     return False
-        return True
+        return False
 
     def min(self):
         if self.is_empty():
@@ -58,9 +60,14 @@ class BST:
     def size(self):
         if self.is_empty():
             return 0
-        print("blarg")
         size = 1 + BST(self.root.left).size() + BST(self.root.right).size()
         return size
+
+    def listify(self):
+        if self.is_empty():
+            return []
+        print("blarg")
+        return BST(self.root.left).listify()+[self.root.value]+BST(self.root.right).listify()
 
     def is_empty(self):
         return self.root == None
